@@ -157,24 +157,78 @@ public class Board
 
     internal void FillGapsWithNewItems()
     {
+        Dictionary<NormalItem.eNormalType, int> itemCount = new Dictionary<NormalItem.eNormalType, int>();
+        List<Cell> emptyCells = new List<Cell>();
 
-        for (int x = 0; x < boardSizeX; x++)
+        for (int y = 0; y < boardSizeY; y++)
         {
-            for (int y = 0; y < boardSizeY; y++)
+            for (int x = 0; x < boardSizeX; x++)
             {
                 Cell cell = m_cells[x, y];
-                if (!cell.IsEmpty) continue;
-
-                NormalItem item = new NormalItem();
-
-                item.SetType(Utils.GetRandomNormalType());
-                item.SetView();
-                item.SetViewRoot(m_root);
-
-                cell.Assign(item);
-                cell.ApplyItemPosition(true);
+                if (!cell.IsEmpty)
+                {
+                    if (cell.Item is NormalItem nItem)
+                    {
+                        if (itemCount.ContainsKey(nItem.ItemType))
+                        {
+                            itemCount[nItem.ItemType]++;
+                        }
+                        else
+                        {
+                            itemCount[nItem.ItemType] = 1;
+                        }
+                    }
+                }
+                else
+                {
+                    emptyCells.Add(cell);
+                }
             }
         }
+
+        foreach (Cell cell in emptyCells)
+        {
+            List<NormalItem.eNormalType> exceptTypes = cell.GetSurroundingNormalItemType();
+            List<NormalItem.eNormalType> priority = itemCount.Keys.OrderBy(x => itemCount[x]).ToList();
+
+            NormalItem item = new NormalItem();
+            NormalItem.eNormalType type = Utils.GetRandomNormalTypeExceptWithPriority(exceptTypes.ToArray(), priority);
+
+
+            item.SetType(type);
+            item.SetView();
+            item.SetViewRoot(m_root);
+
+            cell.Assign(item);
+            cell.ApplyItemPosition(true);
+
+            if (itemCount.ContainsKey(type))
+            {
+                itemCount[type]++;
+            }
+            else
+            {
+                itemCount[type] = 1;
+            }
+        }
+
+        //for (int x = 0; x < boardSizeX; x++)
+        //{
+        //    for (int y = 0; y < boardSizeY; y++)
+        //    {
+        //        Cell cell = m_cells[x, y];
+        //        if (!cell.IsEmpty) continue;
+
+        //        NormalItem item = new NormalItem();
+
+        //        item.SetType(Utils.GetRandomNormalType());
+        //        item.SetView();
+        //        item.SetViewRoot(m_root);
+
+        //        cell.Assign(item);
+        //        cell.ApplyItemPosition(true);
+        //    }
+        //}
     }
 
     internal void ExplodeAllItems()

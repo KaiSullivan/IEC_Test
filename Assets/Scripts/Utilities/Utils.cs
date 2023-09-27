@@ -24,4 +24,12 @@ public class Utils
 
         return result;
     }
+
+    public static NormalItem.eNormalType GetRandomNormalTypeExceptWithPriority(NormalItem.eNormalType[] types, List<NormalItem.eNormalType> priority)
+    {
+        List<NormalItem.eNormalType> list = Enum.GetValues(typeof(NormalItem.eNormalType)).Cast<NormalItem.eNormalType>().Except(types).OrderBy(x => priority.Count - priority.IndexOf(x)).ToList();
+        NormalItem.eNormalType result = list[list.Count - 1];
+
+        return result;
+    }
 }

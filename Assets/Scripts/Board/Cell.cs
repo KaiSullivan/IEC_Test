@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Cell : MonoBehaviour
@@ -90,4 +91,30 @@ public class Cell : MonoBehaviour
     {
         Item.AnimationMoveToPosition();
     }
+
+    public List<NormalItem.eNormalType> GetSurroundingNormalItemType()
+    {
+        List<NormalItem.eNormalType> result = new List<NormalItem.eNormalType>();
+
+        if (NeighbourUp != null && NeighbourUp.Item != null && NeighbourUp.Item is NormalItem)
+        {
+            result.Add((NeighbourUp.Item as NormalItem).ItemType);
+        }
+        if (NeighbourBottom != null && NeighbourBottom.Item != null && NeighbourBottom.Item is NormalItem)
+        {
+            result.Add((NeighbourBottom.Item as NormalItem).ItemType);
+        }
+        if (NeighbourLeft != null && NeighbourLeft.Item != null && NeighbourLeft.Item is NormalItem)
+        {
+            result.Add((NeighbourLeft.Item as NormalItem).ItemType);
+        }
+        if (NeighbourRight != null && NeighbourRight.Item != null && NeighbourRight.Item is NormalItem)
+        {
+            result.Add((NeighbourRight.Item as NormalItem).ItemType);
+        }
+
+        return result;
+    }
+
+
 }
