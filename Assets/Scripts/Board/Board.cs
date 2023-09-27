@@ -112,32 +112,52 @@ public class Board
 
     internal void Shuffle()
     {
-        List<Item> list = new List<Item>();
-        for (int x = 0; x < boardSizeX; x++)
+        int rowLength = m_cells.GetLength(1);
+
+        for (int i = m_cells.Length - 1; i > 0; i--)
         {
-            for (int y = 0; y < boardSizeY; y++)
-            {
-                list.Add(m_cells[x, y].Item);
-                m_cells[x, y].Free();
-            }
+            int i0 = i / rowLength;
+            int i1 = i % rowLength;
+
+            int j = UnityEngine.Random.Range(0, i);
+            int j0 = j / rowLength;
+            int j1 = j % rowLength;
+
+            var temp = m_cells[i0, i1].Item;
+            m_cells[i0, i1].Assign(m_cells[j0, j1].Item);
+            m_cells[i0, i1].ApplyItemMoveToPosition();
+
+            m_cells[j0, j1].Assign(temp);
+            m_cells[j0, j1].ApplyItemMoveToPosition();
         }
 
-        for (int x = 0; x < boardSizeX; x++)
-        {
-            for (int y = 0; y < boardSizeY; y++)
-            {
-                int rnd = UnityEngine.Random.Range(0, list.Count);
-                m_cells[x, y].Assign(list[rnd]);
-                m_cells[x, y].ApplyItemMoveToPosition();
+        //List<Item> list = new List<Item>();
+        //for (int x = 0; x < boardSizeX; x++)
+        //{
+        //    for (int y = 0; y < boardSizeY; y++)
+        //    {
+        //        list.Add(m_cells[x, y].Item);
+        //        m_cells[x, y].Free();
+        //    }
+        //}
 
-                list.RemoveAt(rnd);
-            }
-        }
+        //for (int x = 0; x < boardSizeX; x++)
+        //{
+        //    for (int y = 0; y < boardSizeY; y++)
+        //    {
+        //        int rnd = UnityEngine.Random.Range(0, list.Count);
+        //        m_cells[x, y].Assign(list[rnd]);
+        //        m_cells[x, y].ApplyItemMoveToPosition();
+
+        //        list.RemoveAt(rnd);
+        //    }
+        //}
     }
 
 
     internal void FillGapsWithNewItems()
     {
+
         for (int x = 0; x < boardSizeX; x++)
         {
             for (int y = 0; y < boardSizeY; y++)
@@ -350,7 +370,7 @@ public class Board
         var dir = GetMatchDirection(matches);
 
         var bonus = matches.Where(x => x.Item is BonusItem).FirstOrDefault();
-        if(bonus == null)
+        if (bonus == null)
         {
             return matches;
         }
