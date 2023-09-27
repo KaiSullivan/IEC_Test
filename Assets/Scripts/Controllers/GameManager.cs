@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private UIMainManager m_uiMenu;
 
     private LevelCondition m_levelCondition;
+    private eLevelMode m_currentMode;
 
     private void Awake()
     {
@@ -81,8 +82,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void RestartLevel()
+    {
+        ClearLevel();
+        Destroy(m_levelCondition);
+        m_levelCondition = null;
+        LoadLevel(m_currentMode);
+    }
+
     public void LoadLevel(eLevelMode mode)
     {
+        m_currentMode = mode;
         m_boardController = new GameObject("BoardController").AddComponent<BoardController>();
         m_boardController.StartGame(this, m_gameSettings);
 
