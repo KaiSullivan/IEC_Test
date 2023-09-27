@@ -17,6 +17,12 @@ public class NormalItem : Item
 
     public eNormalType ItemType;
 
+    public override void SetView()
+    {
+        base.SetView();
+        View.gameObject.GetComponent<SpriteRenderer>().sprite = ResourceController.Instance.GetItemConfigDetail(ItemType).icon;
+    }
+
     public void SetType(eNormalType type)
     {
         ItemType = type;

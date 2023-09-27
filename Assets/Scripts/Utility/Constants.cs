@@ -1,4 +1,4 @@
-﻿public class Constants 
+﻿public class Constants
 {
     public const string GAME_SETTINGS_PATH = "gamesettings";
 
@@ -23,4 +23,6 @@
     public const string PREFAB_BONUS_VERTICAL = "prefabs/itemBonusVertical";
 
     public const string PREFAB_BONUS_BOMB = "prefabs/itemBonusBomb";
+
+    public const string ITEM_CONFIG = "ItemConfig";
 }
