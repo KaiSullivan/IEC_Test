@@ -25,6 +25,8 @@ public class Cell : MonoBehaviour
     {
         this.BoardX = cellX;
         this.BoardY = cellY;
+
+        NeighbourUp = NeighbourRight = NeighbourBottom = NeighbourLeft = null;
     }
 
     public bool IsNeighbour(Cell other)
